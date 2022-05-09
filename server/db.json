@@ -1,0 +1,60 @@
+{
+  "watchlist": [
+    {
+      "Stock": "AAPL",
+      "id": 1
+    },
+    {
+      "Stock": "AMD",
+      "id": 2
+    },
+    {
+      "Stock": "AMZN",
+      "id": 3
+    },
+    {
+      "Stock": "BRK.B",
+      "id": 4
+    },
+    {
+      "Stock": "FB",
+      "id": 5
+    },
+    {
+      "Stock": "GOOG",
+      "id": 5
+    },
+    {
+      "Stock": "MSFT",
+      "id": 6
+    },
+    {
+      "Stock": "NVDA",
+      "id": 7
+    },
+    {
+      "Stock": "QQQ",
+      "id": 8
+    },
+    {
+      "Stock": "SPY",
+      "id": 9
+    },
+    {
+      "Stock": "TSLA",
+      "id": 10
+    },
+    {
+      "Stock": "JPM",
+      "id": 11
+    },
+    {
+      "Stock": "PLTR",
+      "id": 12
+    },
+    {
+      "Stock": "NOK",
+      "id": 13
+    }
+  ]
+}
