@@ -40,38 +40,54 @@ const Graph = ({
           strokeWidth={1}
           dot={false}
         />
-        <Line
-          type="monotone"
-          dataKey="fiftyEMA"
-          name="EMA 50"
-          stroke="red"
-          strokeWidth={1}
-          dot={false}
-        />
-        <Line
-          type="monotone"
-          dataKey="fiftySMA"
-          name="SMA 50"
-          stroke="green"
-          strokeWidth={1}
-          dot={false}
-        />
-        <Line
-          type="monotone"
-          dataKey="hundredSMA"
-          name="SMA 100"
-          stroke="purple"
-          strokeWidth={1}
-          dot={false}
-        />
-        <Line
-          type="monotone"
-          dataKey="twoHundredSMA"
-          name="SMA 200"
-          stroke="orange"
-          strokeWidth={1}
-          dot={false}
-        />
+        {fiftyDayEMAYValues.length !== 0 ? (
+          <Line
+            type="monotone"
+            dataKey="fiftyEMA"
+            name="EMA 50"
+            stroke="red"
+            strokeWidth={1}
+            dot={false}
+          />
+        ) : (
+          ""
+        )}
+        {fiftyDaySMAYValues.length !== 0 ? (
+          <Line
+            type="monotone"
+            dataKey="fiftySMA"
+            name="SMA 50"
+            stroke="green"
+            strokeWidth={1}
+            dot={false}
+          />
+        ) : (
+          ""
+        )}
+        {hundredDaySMAYValues.length !== 0 ? (
+          <Line
+            type="monotone"
+            dataKey="hundredSMA"
+            name="EMA 100"
+            stroke="purple"
+            strokeWidth={1}
+            dot={false}
+          />
+        ) : (
+          ""
+        )}
+        {twoHundredDaySMAYValues.length !== 0 ? (
+          <Line
+            type="monotone"
+            dataKey="twoHundredSMA"
+            name="EMA 200"
+            stroke="orange"
+            strokeWidth={1}
+            dot={false}
+          />
+        ) : (
+          ""
+        )}
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="name" />
         <YAxis type="number" domain={[min, max]} />
