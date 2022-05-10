@@ -9,27 +9,35 @@ class Watchlist extends Component {
   render() {
     const { changeStock } = this.props;
     return (
-      <div className="ui secondary vertical menu">
-        <h3>Stock Watchlist</h3>
-        {this.props.watchlist.map((item) => (
-          <>
-            <button
-              className="ui tiny button"
-              onClick={() => changeStock(item.Stock)}
-            >
-              {item.Stock}
-            </button>
-            <button
-              className="negative ui tiny button"
-              onClick={() => this.props.removeFromWatchlist(item.id)}
-            >
-              Remove
-            </button>
-            <br />
-            <br />
-          </>
-        ))}
-      </div>
+      <table className="ui celled table">
+        <thead>
+          <tr>
+            <th style={{ display: "flex", justifyContent: "center" }}>
+              Stock Watchlist
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.watchlist.map((item) => (
+            <tr>
+              <td>
+                <button
+                  className="ui tiny button"
+                  onClick={() => changeStock(item.Stock)}
+                >
+                  {item.Stock}
+                </button>
+                <button
+                  className="negative ui right floated tiny button"
+                  onClick={() => this.props.removeFromWatchlist(item.id)}
+                >
+                  Remove
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
   }
 }

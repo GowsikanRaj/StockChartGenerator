@@ -12,10 +12,14 @@ export const App = () => {
   const [stock, setStock] = useState("AAPL");
   const [stockChartXValues, setStockChartXValues] = useState([]);
   const [stockChartYValues, setStockChartYValues] = useState([]);
+  const [xValues, setXValues] = useState([]);
+  const [yValues, setYValues] = useState([]);
   const [fiftyDaySMAYValues, setFiftyDaySMAYValues] = useState([]);
   const [fiftyDayEMAYValues, setFiftyDayEMAYValues] = useState([]);
   const [hundredDaySMAYValues, setHundredDaySMAYValues] = useState([]);
+  const [hundredDayEMAYValues, setHundredDayEMAYValues] = useState([]);
   const [twoHundredDaySMAYValues, setTwoHundredDaySMAYValues] = useState([]);
+  const [twoHundredDayEMAYValues, setTwoHundredDayEMAYValues] = useState([]);
   const [fiftyTwoWeekHigh, setFiftyTwoWeekHigh] = useState(0);
   const [fiftyTwoWeekLow, setFiftyTwoWeekLow] = useState(0);
 
@@ -24,7 +28,9 @@ export const App = () => {
       setFiftyDayEMAYValues([]);
       setFiftyDaySMAYValues([]);
       setHundredDaySMAYValues([]);
+      setHundredDayEMAYValues([]);
       setTwoHundredDaySMAYValues([]);
+      setTwoHundredDayEMAYValues([]);
 
       const data = await axios
         .get(`https://www.alphavantage.co/query`, {
@@ -62,11 +68,13 @@ export const App = () => {
 
       setFiftyTwoWeekHigh((Math.round(high[252] * 100) / 100).toFixed(2));
       setFiftyTwoWeekLow((Math.round(low[0] * 100) / 100).toFixed(2));
-      setStockChartXValues(xValues.splice(0, 253).reverse());
-      setStockChartYValues(yValues.splice(0, 253).reverse());
+      setStockChartXValues([...xValues].splice(0, 253).reverse());
+      setStockChartYValues([...yValues].splice(0, 253).reverse());
+      setXValues([...xValues].splice(0, 253).reverse());
+      setYValues([...yValues].splice(0, 253).reverse());
     };
 
-    if (stock) {
+    if (stock && stockChartXValues.length !== 0) {
       search();
     } else {
       const timeoutId = setTimeout(() => {
@@ -115,13 +123,24 @@ export const App = () => {
       setFiftyDayEMAYValues(movingYValues.splice(0, 253).reverse());
     } else if (timePeriod === "100" && functionType === "SMA") {
       setHundredDaySMAYValues(movingYValues.splice(0, 253).reverse());
+    } else if (timePeriod === "100" && functionType === "EMA") {
+      setHundredDayEMAYValues(movingYValues.splice(0, 253).reverse());
     } else if (timePeriod === "200" && functionType === "SMA") {
       setTwoHundredDaySMAYValues(movingYValues.splice(0, 253).reverse());
+    } else if (timePeriod === "200" && functionType === "EMA") {
+      setTwoHundredDayEMAYValues(movingYValues.splice(0, 253).reverse());
     }
   };
 
   const changeStock = (value) => {
     setStock(value);
+  };
+
+  const changeStartingDay = (values) => {
+    let datax = [...stockChartXValues];
+    let datay = [...stockChartYValues];
+    setXValues(datax.splice(values, 253));
+    setYValues(datay.splice(values, 253));
   };
 
   return (
@@ -135,12 +154,15 @@ export const App = () => {
           <div className="ui center aligned field">
             <Graph
               stock={stock}
-              stockChartXValues={stockChartXValues}
-              stockChartYValues={stockChartYValues}
+              stockChartXValues={xValues}
+              stockChartYValues={yValues}
               fiftyDayEMAYValues={fiftyDayEMAYValues}
               fiftyDaySMAYValues={fiftyDaySMAYValues}
               hundredDaySMAYValues={hundredDaySMAYValues}
+              hundredDayEMAYValues={hundredDayEMAYValues}
               twoHundredDaySMAYValues={twoHundredDaySMAYValues}
+              twoHundredDayEMAYValues={twoHundredDayEMAYValues}
+              startingDay={changeStartingDay}
             />
             <Indicator createMovingAverage={createMovingAverage} />
             <br />

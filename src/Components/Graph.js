@@ -7,15 +7,18 @@ const Graph = ({
   stockChartYValues,
   fiftyDayEMAYValues,
   fiftyDaySMAYValues,
+  hundredDayEMAYValues,
   hundredDaySMAYValues,
+  twoHundredDayEMAYValues,
   twoHundredDaySMAYValues,
+  startingDay,
 }) => {
   const yValues = [...stockChartYValues];
   const yAxisRange = yValues.sort(function (a, b) {
     return a - b;
   });
-  const min = yAxisRange[0];
-  const max = yAxisRange[252];
+  const yMin = yAxisRange[0];
+  const yMax = yAxisRange[252];
 
   const data = stockChartXValues.map((x, index) => ({
     name: x,
@@ -23,7 +26,9 @@ const Graph = ({
     fiftyEMA: fiftyDayEMAYValues[index],
     fiftySMA: fiftyDaySMAYValues[index],
     hundredSMA: hundredDaySMAYValues[index],
+    hundredEMA: hundredDayEMAYValues[index],
     twoHundredSMA: twoHundredDaySMAYValues[index],
+    twoHundredEMA: twoHundredDayEMAYValues[index],
   }));
 
   return (
@@ -31,6 +36,23 @@ const Graph = ({
       <h3 style={{ display: "flex", justifyContent: "center" }}>
         Stock Chart for {stock}
       </h3>
+      <div style={{ marginBottom: "2vh", marginLeft: "3vw" }}>
+        <button className="ui tiny button" onClick={() => startingDay(247)}>
+          1w
+        </button>
+        <button className="ui tiny button" onClick={() => startingDay(231)}>
+          1m
+        </button>
+        <button className="ui tiny button" onClick={() => startingDay(189)}>
+          3m
+        </button>
+        <button className="ui tiny button" onClick={() => startingDay(126)}>
+          6m
+        </button>
+        <button className="ui tiny button" onClick={() => startingDay(0)}>
+          1y
+        </button>
+      </div>
       <LineChart width={1500} height={750} data={data}>
         <Line
           type="monotone"
@@ -64,12 +86,36 @@ const Graph = ({
         ) : (
           ""
         )}
+        {hundredDayEMAYValues.length !== 0 ? (
+          <Line
+            type="monotone"
+            dataKey="hundredEMA"
+            name="EMA 100"
+            stroke="pink"
+            strokeWidth={1}
+            dot={false}
+          />
+        ) : (
+          ""
+        )}
         {hundredDaySMAYValues.length !== 0 ? (
           <Line
             type="monotone"
             dataKey="hundredSMA"
-            name="EMA 100"
+            name="SMA 100"
             stroke="purple"
+            strokeWidth={1}
+            dot={false}
+          />
+        ) : (
+          ""
+        )}
+        {twoHundredDayEMAYValues.length !== 0 ? (
+          <Line
+            type="monotone"
+            dataKey="twoHundredEMA"
+            name="EMA 200"
+            stroke="black"
             strokeWidth={1}
             dot={false}
           />
@@ -80,7 +126,7 @@ const Graph = ({
           <Line
             type="monotone"
             dataKey="twoHundredSMA"
-            name="EMA 200"
+            name="SMA 200"
             stroke="orange"
             strokeWidth={1}
             dot={false}
@@ -90,7 +136,7 @@ const Graph = ({
         )}
         <CartesianGrid stroke="#ccc" />
         <XAxis dataKey="name" />
-        <YAxis type="number" domain={[min, max]} />
+        <YAxis type="number" domain={[yMin, yMax]} />
         <Legend />
       </LineChart>
     </>
