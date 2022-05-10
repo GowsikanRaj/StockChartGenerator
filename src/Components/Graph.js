@@ -1,95 +1,83 @@
 import React from "react";
-import Plot from "react-plotly.js";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Legend } from "recharts";
 
 const Graph = ({
   stock,
   stockChartXValues,
   stockChartYValues,
-  fiftyDayEMAXValues,
   fiftyDayEMAYValues,
-  fiftyDaySMAXValues,
   fiftyDaySMAYValues,
-  hundredDaySMAXValues,
   hundredDaySMAYValues,
-  twoHundredDaySMAXValues,
   twoHundredDaySMAYValues,
 }) => {
-  const today =
-    String(new Date().getFullYear()) +
-    "-" +
-    String(new Date().getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(new Date().getDate()).padStart(2, "0");
+  const yValues = [...stockChartYValues];
+  const yAxisRange = yValues.sort(function (a, b) {
+    return a - b;
+  });
+  const min = yAxisRange[0];
+  const max = yAxisRange[252];
 
-  const lastYearsDate =
-    String(new Date().getFullYear() - 1) +
-    "-" +
-    String(new Date().getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(new Date().getDate()).padStart(2, "0");
+  const data = stockChartXValues.map((x, index) => ({
+    name: x,
+    stockValues: stockChartYValues[index],
+    fiftyEMA: fiftyDayEMAYValues[index],
+    fiftySMA: fiftyDaySMAYValues[index],
+    hundredSMA: hundredDaySMAYValues[index],
+    twoHundredSMA: twoHundredDaySMAYValues[index],
+  }));
 
   return (
-    <Plot
-      data={[
-        {
-          x: stockChartXValues,
-          y: stockChartYValues,
-          type: "scatter",
-          mode: "lines+markers",
-          marker: { color: "blue" },
-          name: stock,
-        },
-        {
-          x: fiftyDaySMAXValues,
-          y: fiftyDaySMAYValues,
-          type: "scatter",
-          mode: "lines+markers",
-          marker: { color: "purple" },
-          name: "50-day simple moving average",
-        },
-        {
-          x: hundredDaySMAXValues,
-          y: hundredDaySMAYValues,
-          type: "scatter",
-          mode: "lines+markers",
-          marker: { color: "red" },
-          name: "100-day simple moving average",
-        },
-        {
-          x: twoHundredDaySMAXValues,
-          y: twoHundredDaySMAYValues,
-          type: "scatter",
-          mode: "lines+markers",
-          marker: { color: "green" },
-          name: "200-day simple moving average",
-        },
-        {
-          x: fiftyDayEMAXValues,
-          y: fiftyDayEMAYValues,
-          type: "scatter",
-          mode: "lines+markers",
-          marker: { color: "orange" },
-          name: "50-day exponential moving average",
-        },
-      ]}
-      layout={{
-        xaxis: {
-          linecolor: "black",
-          mirror: true,
-          range: [lastYearsDate, today],
-          title: "Date",
-        },
-        yaxis: {
-          linecolor: "black",
-          mirror: true,
-          title: "Stock Price",
-        },
-        width: 1500,
-        height: 750,
-        title: "Stock Chart for " + stock,
-        bordercolor: "black",
-      }}
-    />
+    <>
+      <h3 style={{ display: "flex", justifyContent: "center" }}>
+        Stock Chart for {stock}
+      </h3>
+      <LineChart width={1500} height={750} data={data}>
+        <Line
+          type="monotone"
+          dataKey="stockValues"
+          name={stock}
+          stroke="blue"
+          strokeWidth={1}
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="fiftyEMA"
+          name="EMA 50"
+          stroke="red"
+          strokeWidth={1}
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="fiftySMA"
+          name="SMA 50"
+          stroke="green"
+          strokeWidth={1}
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="hundredSMA"
+          name="SMA 100"
+          stroke="purple"
+          strokeWidth={1}
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="twoHundredSMA"
+          name="SMA 200"
+          stroke="orange"
+          strokeWidth={1}
+          dot={false}
+        />
+        <CartesianGrid stroke="#ccc" />
+        <XAxis dataKey="name" />
+        <YAxis type="number" domain={[min, max]} />
+        <Legend />
+      </LineChart>
+    </>
   );
 };
 

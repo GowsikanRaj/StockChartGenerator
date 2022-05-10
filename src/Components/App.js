@@ -12,26 +12,18 @@ export const App = () => {
   const [stock, setStock] = useState("AAPL");
   const [stockChartXValues, setStockChartXValues] = useState([]);
   const [stockChartYValues, setStockChartYValues] = useState([]);
-  const [fiftyDaySMAXValues, setFiftyDaySMAXValues] = useState([]);
   const [fiftyDaySMAYValues, setFiftyDaySMAYValues] = useState([]);
-  const [fiftyDayEMAXValues, setFiftyDayEMAXValues] = useState([]);
   const [fiftyDayEMAYValues, setFiftyDayEMAYValues] = useState([]);
-  const [hundredDaySMAXValues, setHundredDaySMAXValues] = useState([]);
   const [hundredDaySMAYValues, setHundredDaySMAYValues] = useState([]);
-  const [twoHundredDaySMAXValues, setTwoHundredDaySMAXValues] = useState([]);
   const [twoHundredDaySMAYValues, setTwoHundredDaySMAYValues] = useState([]);
   const [fiftyTwoWeekHigh, setFiftyTwoWeekHigh] = useState(0);
   const [fiftyTwoWeekLow, setFiftyTwoWeekLow] = useState(0);
 
   useEffect(() => {
     const search = async () => {
-      setFiftyDayEMAXValues([]);
       setFiftyDayEMAYValues([]);
-      setFiftyDaySMAXValues([]);
       setFiftyDaySMAYValues([]);
-      setHundredDaySMAXValues([]);
       setHundredDaySMAYValues([]);
-      setTwoHundredDaySMAXValues([]);
       setTwoHundredDaySMAYValues([]);
 
       const data = await axios
@@ -70,8 +62,8 @@ export const App = () => {
 
       setFiftyTwoWeekHigh((Math.round(high[252] * 100) / 100).toFixed(2));
       setFiftyTwoWeekLow((Math.round(low[0] * 100) / 100).toFixed(2));
-      setStockChartXValues(xValues.splice(0, 253));
-      setStockChartYValues(yValues.splice(0, 253));
+      setStockChartXValues(xValues.splice(0, 253).reverse());
+      setStockChartYValues(yValues.splice(0, 253).reverse());
     };
 
     if (stock) {
@@ -118,17 +110,13 @@ export const App = () => {
     }
 
     if (timePeriod === "50" && functionType === "SMA") {
-      setFiftyDaySMAXValues(movingXValues.splice(0, 253));
-      setFiftyDaySMAYValues(movingYValues.splice(0, 253));
+      setFiftyDaySMAYValues(movingYValues.splice(0, 253).reverse());
     } else if (timePeriod === "50" && functionType === "EMA") {
-      setFiftyDayEMAXValues(movingXValues.splice(0, 253));
-      setFiftyDayEMAYValues(movingYValues.splice(0, 253));
+      setFiftyDayEMAYValues(movingYValues.splice(0, 253).reverse());
     } else if (timePeriod === "100" && functionType === "SMA") {
-      setHundredDaySMAXValues(movingXValues.splice(0, 253));
-      setHundredDaySMAYValues(movingYValues.splice(0, 253));
+      setHundredDaySMAYValues(movingYValues.splice(0, 253).reverse());
     } else if (timePeriod === "200" && functionType === "SMA") {
-      setTwoHundredDaySMAXValues(movingXValues.splice(0, 253));
-      setTwoHundredDaySMAYValues(movingYValues.splice(0, 253));
+      setTwoHundredDaySMAYValues(movingYValues.splice(0, 253).reverse());
     }
   };
 
@@ -149,13 +137,9 @@ export const App = () => {
               stock={stock}
               stockChartXValues={stockChartXValues}
               stockChartYValues={stockChartYValues}
-              fiftyDayEMAXValues={fiftyDayEMAXValues}
               fiftyDayEMAYValues={fiftyDayEMAYValues}
-              fiftyDaySMAXValues={fiftyDaySMAXValues}
               fiftyDaySMAYValues={fiftyDaySMAYValues}
-              hundredDaySMAXValues={hundredDaySMAXValues}
               hundredDaySMAYValues={hundredDaySMAYValues}
-              twoHundredDaySMAXValues={twoHundredDaySMAXValues}
               twoHundredDaySMAYValues={twoHundredDaySMAYValues}
             />
             <Indicator createMovingAverage={createMovingAverage} />
